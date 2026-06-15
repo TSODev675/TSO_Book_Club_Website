@@ -1,8 +1,5 @@
 from rest_framework.permissions import AllowAny
-from rest_framework import permissions, status
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.request import Request
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth.models import User
@@ -11,7 +8,14 @@ from .serializers import (
     UserSerializer, ProfileSerializer, BookSerializer, RegisterSerializer,
     MeetingSerializer, ArchiveSerializer, ReflectionSerializer, MessageSerializer
 )
+from .emails import send_confirmation_email
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+from backend.bookclub import serializers
 
 # --- Permissions ---
 
@@ -39,21 +43,23 @@ class IsOwnerOrAdmin(permissions.BasePermission):
 
 # --- ViewSets ---
 
-class RegisterViewSet(GenericViewSet):
+class RegisterViewSet(viewsets.GenericViewSet):
     permission_classes = [AllowAny]
     serializer_class = RegisterSerializer
 
     @action(detail=False, methods=['post'], url_path='register')
-    def register(self, request: Request) -> Response:
+    def register(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        send_confirmation_email(user)
         return Response({
             'id': user.id,
             'username': user.username,
             'email': user.email,
+            'detail': 'Registration successful. Please check your email to confirm your account.',
         }, status=status.HTTP_201_CREATED)
-    
+
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """List and retrieve users (read-only). Admin only."""
     queryset = User.objects.all().select_related('profile')
@@ -180,3 +186,36 @@ class MessageViewSet(viewsets.ModelViewSet):
         message.is_read = True
         message.save()
         return Response({'status': 'message marked as read'})
+    
+class VerifyEmailViewSet(viewsets.GenericViewSet):
+    permission_classes = [AllowAny]
+
+    @action(detail=False, methods=['get'], url_path='verify-email/(?P<uidb64>[^/.]+)/(?P<token>[^/.]+)')
+    def verify_email(self, request, uidb64=None, token=None):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return Response({'detail': 'Invalid link.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if default_token_generator.check_token(user, token):
+            profile = user.profile
+            if profile.is_verified:
+                return Response({'detail': 'Account already verified.'}, status=status.HTTP_200_OK)
+            profile.is_verified = True
+            profile.save()
+            return Response({'detail': 'Email verified successfully. You can now log in.'}, status=status.HTTP_200_OK)
+
+        return Response({'detail': 'Invalid or expired link.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        if not self.user.profile.is_verified:
+            raise serializers.ValidationError(
+                {'detail': 'Please verify your email before logging in.'}
+            )
+        return data
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
