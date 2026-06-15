@@ -1,10 +1,14 @@
-from rest_framework import viewsets, permissions, status
+from rest_framework.permissions import AllowAny
+from rest_framework import permissions, status
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.request import Request
+from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from .models import Profile, Book, Meeting, Archive, Reflection, Message
 from .serializers import (
-    UserSerializer, ProfileSerializer, BookSerializer,
+    UserSerializer, ProfileSerializer, BookSerializer, RegisterSerializer,
     MeetingSerializer, ArchiveSerializer, ReflectionSerializer, MessageSerializer
 )
 
@@ -35,6 +39,21 @@ class IsOwnerOrAdmin(permissions.BasePermission):
 
 # --- ViewSets ---
 
+class RegisterViewSet(GenericViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = RegisterSerializer
+
+    @action(detail=False, methods=['post'], url_path='register')
+    def register(self, request: Request) -> Response:
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        return Response({
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+        }, status=status.HTTP_201_CREATED)
+    
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """List and retrieve users (read-only). Admin only."""
     queryset = User.objects.all().select_related('profile')
