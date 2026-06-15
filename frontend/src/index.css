@@ -1,3 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+:root {
+  --csir-navy: #1B3A7A;
+  --csir-navy-dark: #0F2455;
+  --csir-blue-light: #93B8F5;
+  --csir-blue-bg: #E8EFFE;
+}
