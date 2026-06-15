@@ -15,7 +15,6 @@ from django.utils.encoding import force_str
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from backend.bookclub import serializers
 
 # --- Permissions ---
 
