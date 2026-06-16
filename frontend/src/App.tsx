@@ -4,6 +4,8 @@ import ContactPage from './pages/ContactPage'
 import PrivacyPage from './pages/PrivacyPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import DashboardRouter from './pages/DashboardRouter'
+import ProtectedRoute from './components/ProtectedRoute'
 
 export default function App() {
   return (
@@ -14,6 +16,11 @@ export default function App() {
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/dashboard/*" element={
+          <ProtectedRoute>
+            <DashboardRouter />
+          </ProtectedRoute>
+        } />
       </Routes>
     </BrowserRouter>
   )
