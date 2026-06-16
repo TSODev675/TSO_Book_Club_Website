@@ -194,7 +194,9 @@ class VerifyEmailViewSet(viewsets.GenericViewSet):
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+           
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist) as e:
+            
             return Response({'detail': 'Invalid link.'}, status=status.HTTP_400_BAD_REQUEST)
 
         if default_token_generator.check_token(user, token):
@@ -206,7 +208,7 @@ class VerifyEmailViewSet(viewsets.GenericViewSet):
             return Response({'detail': 'Email verified successfully. You can now log in.'}, status=status.HTTP_200_OK)
 
         return Response({'detail': 'Invalid or expired link.'}, status=status.HTTP_400_BAD_REQUEST)
-    
+        
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
