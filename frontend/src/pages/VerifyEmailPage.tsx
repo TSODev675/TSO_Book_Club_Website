@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import api from '../lib/api'
 
@@ -6,16 +6,27 @@ export default function VerifyEmailPage() {
   const { uid, token } = useParams()
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
   const [message, setMessage] = useState('')
+  const called = useRef(false)
 
   useEffect(() => {
+    if (called.current) return
+    called.current = true
+
     api.get(`/auth/verify-email/${uid}/${token}/`)
       .then((res) => {
         setStatus('success')
         setMessage(res.data.detail)
       })
       .catch((err) => {
-        setStatus('error')
-        setMessage(err.response?.data?.detail || 'Invalid or expired link.')
+        const detail = err.response?.data?.detail || 'Invalid or expired link.'
+        // treat "already verified" as success
+        if (detail.toLowerCase().includes('already verified')) {
+          setStatus('success')
+          setMessage('Your email is already verified. You can sign in.')
+        } else {
+          setStatus('error')
+          setMessage(detail)
+        }
       })
   }, [uid, token])
 
