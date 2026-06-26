@@ -233,22 +233,26 @@ export default function MessagesPage() {
               To
             </label>
             <select
-              value={form.recipient_id}
-              onChange={(e) => setForm({ ...form, recipient_id: e.target.value })}
-              className="w-full px-4 py-2.5 text-sm border rounded-lg outline-none"
-              style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-primary)', background: 'var(--color-surface)' }}
+            value={form.recipient_id}
+            onChange={(e) => setForm({ ...form, recipient_id: e.target.value })}
+            className="w-full px-4 py-2.5 text-sm border rounded-lg outline-none"
+            style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-primary)', background: 'var(--color-surface)' }}
             >
-              <option value="">Select a member...</option>
-              {users
-                .filter((u) => u.username !== profile?.user.username)
+            <option value="">Select a recipient...</option>
+            {users
+                .filter((u) => {
+                    if (profile?.role === 'admin') {
+                        return u.username !== profile?.user.username
+                    } else {
+                        return u.role === 'admin'
+                    }
+                })
                 .map((u: any) => (
-                  <option key={u.id} value={u.id}>
+                <option key={u.id} value={u.id}>
                     {u.first_name ? `${u.first_name} ${u.last_name}` : u.username}
-                  </option>
+                </option>
                 ))}
             </select>
-          </div>
-
           <div className="mb-5">
             <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>
               Message
