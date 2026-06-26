@@ -14,6 +14,7 @@ import ProfilePage from './pages/dashboard/ProfilePage'
 import MeetingsPage from './pages/dashboard/MeetingsPage'
 import BooksPage from './pages/dashboard/BooksPage'
 import ManageBooksPage from './pages/dashboard/admin/ManageBooksPage'
+import ManageMeetingsPage from './pages/dashboard/admin/ManageMeetingsPage'
 
 export default function App() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
         <Route path="/dashboard/messages" element={<ProtectedRoute><MessagesPage /></ProtectedRoute>} />
         <Route path="/dashboard/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} /> 
         <Route path="/dashboard/admin/manage-books" element={<ProtectedRoute><ManageBooksPage /></ProtectedRoute>} />
+        <Route path="/dashboard/admin/manage-meetings" element={<ProtectedRoute><ManageMeetingsPage /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   )
