@@ -1,24 +1,120 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
-    .container { background: #fff; padding: 30px; border-radius: 8px; max-width: 500px; margin: auto; }
-    .btn { display: inline-block; padding: 12px 24px; background: #4F46E5; color: #fff; text-decoration: none; border-radius: 6px; margin-top: 20px; }
-    .footer { font-size: 12px; color: #999; margin-top: 30px; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirm your email — TSO Book Club</title>
 </head>
-<body>
-  <div class="container">
-    <h2>Welcome to TSO Book Club, {{ user.first_name|default:user.username }}!</h2>
-    <p>Thank you for signing up. Please confirm your email address to activate your account.</p>
-    <a href="{{ confirm_url }}" class="btn">Confirm Email</a>
-    <p>Or copy this link into your browser:</p>
-    <p><small>{{ confirm_url }}</small></p>
-    <div class="footer">
-      If you did not sign up for TSO Book Club, please ignore this email.
-    </div>
-  </div>
+<body style="margin:0;padding:0;background:#F5F7FA;font-family:Arial,sans-serif;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#F5F7FA;padding:40px 0;">
+    <tr>
+      <td align="center">
+        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
+
+          <!-- Header -->
+          <tr>
+            <td align="center" style="padding-bottom:24px;">
+              <table cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="background:#1B3A7A;border-radius:50%;width:44px;height:44px;text-align:center;vertical-align:middle;">
+                    <span style="color:white;font-size:12px;font-weight:bold;">CSIR</span>
+                  </td>
+                  <td style="padding-left:12px;">
+                    <span style="color:#1B3A7A;font-size:16px;font-weight:bold;">TSO Book Club</span><br>
+                    <span style="color:#9CA3AF;font-size:11px;">Touching lives through innovation</span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Card -->
+          <tr>
+            <td style="background:#ffffff;border-radius:16px;padding:48px 48px 40px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+
+              <!-- Icon -->
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center" style="padding-bottom:28px;">
+                    <div style="background:#E8EFFE;border-radius:50%;width:64px;height:64px;line-height:64px;text-align:center;font-size:28px;">
+                      📚
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Heading -->
+              <h1 style="margin:0 0 8px;font-size:22px;font-weight:600;color:#111827;text-align:center;">
+                Welcome, {{ user.first_name|default:user.username }}!
+              </h1>
+              <p style="margin:0 0 28px;font-size:14px;color:#6B7280;text-align:center;line-height:1.6;">
+                You're one step away from joining the CSIR TSO Book Club community. Confirm your email address to activate your account.
+              </p>
+
+              <!-- CTA Button -->
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center" style="padding-bottom:28px;">
+                    <a href="{{ confirm_url }}"
+                       style="display:inline-block;background:#1B3A7A;color:#ffffff;text-decoration:none;font-size:14px;font-weight:600;padding:14px 36px;border-radius:8px;letter-spacing:0.3px;">
+                      Confirm my email
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Divider -->
+              <hr style="border:none;border-top:1px solid #F3F4F6;margin:0 0 24px;">
+
+              <!-- Info boxes -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+                <tr>
+                  <td width="33%" style="text-align:center;padding:12px 8px;background:#F9FAFB;border-radius:8px;">
+                    <div style="font-size:20px;margin-bottom:4px;">📅</div>
+                    <div style="font-size:11px;font-weight:600;color:#374151;">Meetings</div>
+                    <div style="font-size:11px;color:#9CA3AF;">Join sessions</div>
+                  </td>
+                  <td width="4%"></td>
+                  <td width="33%" style="text-align:center;padding:12px 8px;background:#F9FAFB;border-radius:8px;">
+                    <div style="font-size:20px;margin-bottom:4px;">💬</div>
+                    <div style="font-size:11px;font-weight:600;color:#374151;">Reflections</div>
+                    <div style="font-size:11px;color:#9CA3AF;">Share insights</div>
+                  </td>
+                  <td width="4%"></td>
+                  <td width="33%" style="text-align:center;padding:12px 8px;background:#F9FAFB;border-radius:8px;">
+                    <div style="font-size:20px;margin-bottom:4px;">🗂️</div>
+                    <div style="font-size:11px;font-weight:600;color:#374151;">Archive</div>
+                    <div style="font-size:11px;color:#9CA3AF;">Past sessions</div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Fallback link -->
+              <p style="margin:0;font-size:12px;color:#9CA3AF;text-align:center;line-height:1.6;">
+                Button not working? Copy this link into your browser:<br>
+                <a href="{{ confirm_url }}" style="color:#1B3A7A;word-break:break-all;">{{ confirm_url }}</a>
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:24px 0;text-align:center;">
+              <p style="margin:0 0 4px;font-size:11px;color:#9CA3AF;">
+                © 2026 CSIR TSO Book Club. All rights reserved.
+              </p>
+              <p style="margin:0;font-size:11px;color:#9CA3AF;">
+                If you didn't sign up, you can safely ignore this email.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
 </body>
 </html>
