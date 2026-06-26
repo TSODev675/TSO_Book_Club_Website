@@ -7,12 +7,13 @@ import RegisterPage from './pages/RegisterPage'
 import VerifyEmailPage from './pages/VerifyEmailPage'
 import DashboardRouter from './pages/DashboardRouter'
 import ProtectedRoute from './components/ProtectedRoute'
-import MeetingsPage from './pages/dashboard/MeetingsPage'
-import BooksPage from './pages/dashboard/BooksPage'
 import ArchivePage from './pages/dashboard/ArchivePage'
 import ReflectionsPage from './pages/dashboard/ReflectionsPage'
 import MessagesPage from './pages/dashboard/MessagesPage'
 import ProfilePage from './pages/dashboard/ProfilePage'
+import MeetingsPage from './pages/dashboard/MeetingsPage'
+import BooksPage from './pages/dashboard/BooksPage'
+import ManageBooksPage from './pages/dashboard/admin/ManageBooksPage'
 
 export default function App() {
   return (
@@ -30,7 +31,8 @@ export default function App() {
         <Route path="/dashboard/archive" element={<ProtectedRoute><ArchivePage /></ProtectedRoute>} />
         <Route path="/dashboard/reflections" element={<ProtectedRoute><ReflectionsPage /></ProtectedRoute>} />
         <Route path="/dashboard/messages" element={<ProtectedRoute><MessagesPage /></ProtectedRoute>} />
-        <Route path="/dashboard/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+        <Route path="/dashboard/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} /> 
+        <Route path="/dashboard/admin/manage-books" element={<ProtectedRoute><ManageBooksPage /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   )
