@@ -16,6 +16,7 @@ import ProfilePage from './pages/dashboard/ProfilePage'
 import ManageBooksPage from './pages/dashboard/admin/ManageBooksPage'
 import ManageMeetingsPage from './pages/dashboard/admin/ManageMeetingsPage'
 import AdminDashboard from './pages/dashboard/admin/AdminDashboard'
+import ManageMembersPage from './pages/dashboard/admin/ManageMembersPage'
 
 export default function App() {
   return (
@@ -42,6 +43,7 @@ export default function App() {
         <Route path="/dashboard/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
         <Route path="/dashboard/manage-books" element={<ProtectedRoute><ManageBooksPage /></ProtectedRoute>} />
         <Route path="/dashboard/manage-meetings" element={<ProtectedRoute><ManageMeetingsPage /></ProtectedRoute>} />
+        <Route path="/dashboard/members" element={<ProtectedRoute><ManageMembersPage /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   )
