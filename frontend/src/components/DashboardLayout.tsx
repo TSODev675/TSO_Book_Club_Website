@@ -1,79 +1,148 @@
+import { NavLink } from 'react-router-dom'
 import { useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { logout } from '../lib/auth'
 
+type IconProps = {
+  size?: number
+  strokeWidth?: number
+  className?: string
+}
+
+const createIcon = (label: string) => ({ size = 18, className = '' }: IconProps) => (
+  <span
+    className={className}
+    style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: size,
+      height: size,
+      fontSize: size * 0.75,
+      lineHeight: 1,
+    }}
+  >
+    {label}
+  </span>
+)
+
+const IconHome = createIcon('H')
+const IconCalendar = createIcon('C')
+const IconBook = createIcon('B')
+const IconArchive = createIcon('A')
+const IconMessage = createIcon('M')
+const IconUser = createIcon('U')
+const IconNotes = createIcon('N')
+const IconLogout = createIcon('L')
+const IconUsers = createIcon('U')
+const IconBookUpload = createIcon('B')
+const IconCalendarPlus = createIcon('+')
+const IconChevronLeft = createIcon('◀')
+const IconChevronRight = createIcon('▶')
+
 const memberLinks = [
-  { label: 'Overview', path: '/dashboard', icon: '🏠' },
-  { label: 'Meetings', path: '/dashboard/meetings', icon: '📅' },
-  { label: 'Books', path: '/dashboard/books', icon: '📚' },
-  { label: 'Reflections', path: '/dashboard/reflections', icon: '💬' },
+  { label: 'Overview', path: '/dashboard', icon: IconHome, end: true },
+  { label: 'Upcoming Meetings', path: '/dashboard/meetings', icon: IconCalendar },
+  { label: 'Current Book', path: '/dashboard/books', icon: IconBook },
+  { label: 'Archive', path: '/dashboard/archive', icon: IconArchive },
+  { label: 'Reflections', path: '/dashboard/reflections', icon: IconNotes },
+  { label: 'Messages', path: '/dashboard/messages', icon: IconMessage },
+  { label: 'My Profile', path: '/dashboard/profile', icon: IconUser },
 ]
 
 const adminLinks = [
-  ...memberLinks,
-  { label: 'Manage members', path: '/dashboard/members', icon: '👥' },
-  { label: 'Manage books', path: '/dashboard/manage-books', icon: '📖' },
-  { label: 'Manage meetings', path: '/dashboard/manage-meetings', icon: '🗓️' },
+  { label: 'Overview', path: '/dashboard', icon: IconHome, end: true },
+  { label: 'Upcoming Meetings', path: '/dashboard/meetings', icon: IconCalendar },
+  { label: 'Current Book', path: '/dashboard/books', icon: IconBook },
+  { label: 'Archive', path: '/dashboard/archive', icon: IconArchive },
+  { label: 'Reflections', path: '/dashboard/reflections', icon: IconNotes },
+  { label: 'Messages', path: '/dashboard/messages', icon: IconMessage },
+  { label: 'My Profile', path: '/dashboard/profile', icon: IconUser },
+  { label: 'Manage Members', path: '/dashboard/members', icon: IconUsers },
+  { label: 'Manage Books', path: '/dashboard/manage-books', icon: IconBookUpload },
+  { label: 'Manage Meetings', path: '/dashboard/manage-meetings', icon: IconCalendarPlus },
 ]
 
 interface Props {
   children: React.ReactNode
   isAdmin?: boolean
   username?: string
+  fullName?: string
 }
 
-export default function DashboardLayout({ children, isAdmin, username }: Props) {
-  const location = useLocation()
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+export default function DashboardLayout({ children, isAdmin, username, fullName }: Props) {
+  const [collapsed, setCollapsed] = useState(false)
   const links = isAdmin ? adminLinks : memberLinks
 
   return (
-    <div className="min-h-screen flex" style={{ background: '#F5F7FA' }}>
+    <div className="min-h-screen flex" style={{ background: 'var(--color-bg)', fontFamily: 'var(--font-body)' }}>
+
       {/* Sidebar */}
       <aside
-        className="flex flex-col justify-between py-6 px-4 transition-all duration-200"
+        className="flex flex-col justify-between py-6 transition-all duration-300 relative"
         style={{
           background: 'var(--csir-navy)',
-          width: sidebarOpen ? '220px' : '64px',
+          width: collapsed ? '68px' : '240px',
           minHeight: '100vh',
           flexShrink: 0,
         }}
       >
+        {/* Logo */}
         <div>
-          <div className="flex items-center gap-2 mb-8 px-2">
+          <div className="flex items-center gap-3 px-5 mb-8">
             <div className="w-8 h-8 rounded-full bg-white flex-shrink-0 flex items-center justify-center">
-              <span className="text-xs font-medium" style={{ color: 'var(--csir-navy)' }}>C</span>
+              <span className="text-xs font-semibold" style={{ color: 'var(--csir-navy)', fontFamily: 'var(--font-body)' }}>C</span>
             </div>
-            {sidebarOpen && <span className="text-white text-sm font-medium truncate">TSO Book Club</span>}
+            {!collapsed && (
+              <div>
+                <p className="text-white text-sm font-semibold leading-tight">TSO Book Club</p>
+                <p className="text-white/40 text-xs">CSIR</p>
+              </div>
+            )}
           </div>
 
-          <nav className="flex flex-col gap-1">
-            {links.map((link) => {
-              const active = location.pathname === link.path
-              return (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition"
-                  style={{
-                    background: active ? 'rgba(255,255,255,0.15)' : 'transparent',
-                    color: active ? 'white' : 'rgba(255,255,255,0.6)',
-                  }}
-                >
-                  <span className="text-base flex-shrink-0">{link.icon}</span>
-                  {sidebarOpen && <span className="truncate">{link.label}</span>}
-                </Link>
-              )
-            })}
+          {/* Nav links */}
+          {!collapsed && (
+            <p className="text-white/30 text-xs font-semibold uppercase tracking-widest px-5 mb-2">
+              {isAdmin ? 'Admin' : 'Member'}
+            </p>
+          )}
+
+          <nav className="flex flex-col gap-0.5 px-3">
+            {links.map((link) => (
+              <NavLink
+                key={link.path}
+                to={link.path}
+                end={link.end}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 ${
+                    isActive
+                      ? 'bg-white/15 text-white font-medium'
+                      : 'text-white/55 hover:text-white hover:bg-white/8'
+                  }`
+                }
+              >
+                <link.icon size={18} strokeWidth={1.8} className="flex-shrink-0" />
+                {!collapsed && <span className="truncate">{link.label}</span>}
+              </NavLink>
+            ))}
           </nav>
+
+          {/* Admin section divider */}
+          {isAdmin && !collapsed && (
+            <p className="text-white/30 text-xs font-semibold uppercase tracking-widest px-5 mt-5 mb-2">
+              Admin
+            </p>
+          )}
         </div>
 
-        <div>
-          {sidebarOpen && (
-            <div className="px-3 mb-3">
+        {/* Bottom */}
+        <div className="px-3">
+          {!collapsed && (
+            <div className="px-3 mb-3 pb-3 border-b border-white/10">
+              <p className="text-white text-sm font-medium truncate">{fullName || username}</p>
               <p className="text-white/40 text-xs truncate">{username}</p>
               {isAdmin && (
-                <span className="text-xs px-2 py-0.5 rounded-full mt-1 inline-block" style={{ background: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.8)' }}>
+                <span className="mt-1 inline-block text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)' }}>
                   Admin
                 </span>
               )}
@@ -81,18 +150,43 @@ export default function DashboardLayout({ children, isAdmin, username }: Props) 
           )}
           <button
             onClick={logout}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm w-full transition"
-            style={{ color: 'rgba(255,255,255,0.5)' }}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm w-full transition text-white/50 hover:text-white hover:bg-white/8"
           >
-            <span className="flex-shrink-0">🚪</span>
-            {sidebarOpen && <span>Sign out</span>}
+            <IconLogout size={18} strokeWidth={1.8} className="flex-shrink-0" />
+            {!collapsed && <span>Sign out</span>}
           </button>
         </div>
+
+        {/* Collapse toggle */}
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="absolute -right-3 top-8 w-6 h-6 rounded-full border flex items-center justify-center transition"
+          style={{ background: 'var(--csir-navy)', borderColor: 'rgba(255,255,255,0.2)', color: 'white' }}
+        >
+          {collapsed
+            ? <IconChevronRight size={12} />
+            : <IconChevronLeft size={12} />
+          }
+        </button>
       </aside>
 
-      {/* Main content */}
-      <main className="flex-1 p-8 overflow-auto">
-        {children}
+      {/* Main */}
+      <main className="flex-1 overflow-auto">
+        {/* Top bar */}
+        <div className="sticky top-0 z-10 flex items-center justify-between px-8 h-14 border-b" style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}>
+          <div />
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold text-white" style={{ background: 'var(--csir-navy)' }}>
+              {(fullName || username || '?')[0].toUpperCase()}
+            </div>
+            {!collapsed && <span className="text-sm text-gray-600">{fullName || username}</span>}
+          </div>
+        </div>
+
+        {/* Page content */}
+        <div className="p-8">
+          {children}
+        </div>
       </main>
     </div>
   )
