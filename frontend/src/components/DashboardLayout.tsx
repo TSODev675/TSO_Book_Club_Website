@@ -27,6 +27,7 @@ const adminLinks = [
   { label: 'My Profile', path: '/dashboard/profile', icon: User },
   { label: 'Manage Books', path: '/dashboard/manage-books', icon: BookMarked },
   { label: 'Manage Meetings', path: '/dashboard/manage-meetings', icon: CalendarPlus },
+  { label: 'Manage Archives', path: '/dashboard/manage-archives', icon: Archive },
   { label: 'Manage Members', path: '/dashboard/members', icon: Users },
 ]
 
