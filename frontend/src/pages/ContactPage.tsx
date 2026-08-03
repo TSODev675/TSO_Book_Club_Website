@@ -83,8 +83,8 @@ export default function ContactPage() {
             <div className="mt-8 pt-6 border-t border-gray-100 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
               <div>
                 <p className="text-xs text-gray-400 mb-1">Email</p>
-                <a href="mailto:tsobookclub@csir.co.za" className="text-xs font-medium" style={{ color: 'var(--csir-navy)' }}>
-                  tsobookclub@csir.co.za
+                <a href="mailto:tsobookclub@gmail.com" className="text-xs font-medium" style={{ color: 'var(--csir-navy)' }}>
+                  tsobookclub@gmail.com
                 </a>
               </div>
               <div>
@@ -93,7 +93,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <p className="text-xs text-gray-400 mb-1">Response time</p>
-                <p className="text-xs font-medium text-gray-700">Within 2 business days</p>
+                <p className="text-xs font-medium text-gray-700">Within 5 business days</p>
               </div>
             </div>
           </div>

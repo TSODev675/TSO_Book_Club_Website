@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom'
+// import logo from '../assets/tso_bookclub_logo.svg'
 
 export default function Hero() {
   const navigate = useNavigate()
 
   return (
     <div className="text-center px-8 py-24" style={{ background: 'var(--csir-navy)' }}>
+      {/* <img src={logo} alt="TSO Book Club Logo" className="ml-2" /> */}
       <span className="inline-block text-xs px-4 py-1 rounded-full mb-6 text-white/80" style={{ background: 'rgba(255,255,255,0.12)' }}>
         📚 CSIR TSO Reading Community
       </span>
