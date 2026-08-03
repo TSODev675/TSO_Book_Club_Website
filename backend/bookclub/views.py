@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 from .models import Profile, Book, Meeting, Archive, Reflection, Message
 from .serializers import (
     UserSerializer, ProfileSerializer, BookSerializer, RegisterSerializer,
-    MeetingSerializer, ArchiveSerializer, ReflectionSerializer, MessageSerializer
+    MeetingSerializer, ArchiveSerializer, ReflectionSerializer, MessageSerializer,
+    ChangePasswordSerializer
 )
 from .emails import send_confirmation_email
 from django.contrib.auth.tokens import default_token_generator
@@ -59,11 +60,18 @@ class RegisterViewSet(viewsets.GenericViewSet):
             'detail': 'Registration successful. Please check your email to confirm your account.',
         }, status=status.HTTP_201_CREATED)
 
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    """List and retrieve users (read-only). Admin only."""
+class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().select_related('profile')
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdminRole]
+
+    def get_permissions(self):
+        if self.action == 'list':
+            return [permissions.IsAuthenticated(), IsAdminRole()]
+        if self.action in ['update', 'partial_update']:
+            return [permissions.IsAuthenticated(), IsOwnerOrAdmin()]
+        if self.action == 'destroy':
+            return [permissions.IsAuthenticated(), IsAdminRole()]
+        return [permissions.IsAuthenticated()]
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -220,3 +228,19 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+
+class ChangePasswordViewSet(viewsets.GenericViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ChangePasswordSerializer
+
+    @action(detail=False, methods=['post'], url_path='change-password')
+    def change_password(self, request):
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        request.user.set_password(serializer.validated_data['new_password'])
+        request.user.save()
+        return Response(
+            {'detail': 'Password changed successfully.'},
+            status=status.HTTP_200_OK
+        )

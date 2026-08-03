@@ -1,7 +1,7 @@
 from typing import Any
 from rest_framework.routers import DefaultRouter
 from .views import (
-    UserViewSet, ProfileViewSet, BookViewSet, RegisterViewSet,
+    ChangePasswordViewSet, UserViewSet, ProfileViewSet, BookViewSet, RegisterViewSet,
     MeetingViewSet, ArchiveViewSet, ReflectionViewSet, MessageViewSet, VerifyEmailViewSet
 )
 
@@ -15,5 +15,6 @@ router.register(r'reflections', ReflectionViewSet, basename='reflection')
 router.register(r'messages', MessageViewSet, basename='message')
 router.register(r'auth', RegisterViewSet, basename='auth')
 router.register(r'auth', VerifyEmailViewSet, basename='verify')
+router.register(r'auth', ChangePasswordViewSet, basename='change-password')
 
 urlpatterns = router.urls

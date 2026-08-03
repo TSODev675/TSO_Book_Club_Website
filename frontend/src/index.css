@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+:root {
+  /* CSIR Brand Colors */
+  --csir-navy: #1B3A7A;
+  --csir-navy-dark: #0F2455;
+  --csir-navy-light: #2A4F9F;
+  --csir-blue-light: #93B8F5;
+  --csir-blue-bg: #E8EFFE;
+
+  /* Neutrals */
+  --color-bg: #F5F7FA;
+  --color-surface: #FFFFFF;
+  --color-border: #E5E9F0;
+  --color-text-primary: #111827;
+  --color-text-secondary: #6B7280;
+  --color-text-muted: #9CA3AF;
+
+  /* Fonts */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+}
