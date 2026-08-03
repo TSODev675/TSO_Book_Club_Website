@@ -1,6 +1,6 @@
 import { useProfile } from '../hooks/useProfile'
 import MemberDashboard from './dashboard/MemberDashboard'
-import AdminDashboard from './dashboard/AdminDashboard'
+import AdminDashboard from './dashboard/admin/AdminDashboard'
 
 export default function DashboardRouter() {
   const { profile, loading } = useProfile()
