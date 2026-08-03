@@ -2,30 +2,33 @@ import { useEffect, useState, type SVGProps } from 'react'
 import api from '../../lib/api'
 import DashboardLayout from '../../components/DashboardLayout'
 import { useProfile } from '../../hooks/useProfile'
+import AddToCalendar from '../../components/AddToCalendar'
 
-const IconCalendar = (props: SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" {...props}>
+type IconProps = SVGProps<SVGSVGElement> & { size?: number }
+
+const IconCalendar = ({ size = 24, ...props }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" {...props}>
     <rect x="3" y="4" width="18" height="18" rx="2" />
     <path d="M16 2v4M8 2v4M3 10h18" />
   </svg>
 )
 
-const IconVideo = (props: SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" {...props}>
+const IconVideo = ({ size = 24, ...props }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" {...props}>
     <rect x="3" y="6" width="15" height="12" rx="2" />
     <path d="M18 8l4-2v12l-4-2" />
   </svg>
 )
 
-const IconUser = (props: SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" {...props}>
+const IconUser = ({ size = 24, ...props }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" {...props}>
     <circle cx="12" cy="8" r="4" />
     <path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6" />
   </svg>
 )
 
-const IconClock = (props: SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" {...props}>
+const IconClock = ({ size = 24, ...props }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" {...props}>
     <circle cx="12" cy="12" r="9" />
     <path d="M12 7v5l3 3" />
   </svg>
@@ -128,6 +131,12 @@ export default function MeetingsPage() {
                   Join on Teams
                 </a>
               )}
+              <AddToCalendar
+                title={`TSO Book Club — ${m.book?.title}`}
+                date={m.date}
+                description={m.topic || 'TSO Book Club reading session'}
+                teamsLink={m.teams_link}
+              />
             </div>
           ))}
         </div>

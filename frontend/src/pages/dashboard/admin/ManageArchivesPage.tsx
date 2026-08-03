@@ -342,7 +342,7 @@ export default function ManageArchivesPage() {
                     </p>
 
                     {a.video_link && (
-                      
+                      <a
                         href={a.video_link}
                         target="_blank"
                         rel="noreferrer"

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import api from '../../lib/api'
 import DashboardLayout from '../../components/DashboardLayout'
 import { useProfile } from '../../hooks/useProfile'
+import AddToCalendar from '../../components/AddToCalendar'
 
 const IconCalendar = ({ size = 20, style, strokeWidth = 1.8 }: { size?: number; style?: CSSProperties; strokeWidth?: number }) => (
   <svg
@@ -162,6 +163,11 @@ export default function MemberDashboard() {
                         <IconVideo size={12} /> Join on Teams
                       </a>
                     )}
+                    <AddToCalendar
+                      title={`TSO Book Club — ${m.book?.title}`}
+                      date={m.date}
+                      teamsLink={m.teams_link}
+                    />
                   </div>
                 </div>
               ))}
