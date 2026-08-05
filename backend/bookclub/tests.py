@@ -8,7 +8,10 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 
-@override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
+@override_settings(
+    EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend',
+    SECURE_SSL_REDIRECT=False,
+)
 class AuthenticationFlowTests(APITestCase):
     def test_health_check_reaches_database(self):
         response = self.client.get('/health/')

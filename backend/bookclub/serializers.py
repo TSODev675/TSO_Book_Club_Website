@@ -3,6 +3,12 @@ from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import User
 from .models import Profile, Book, Meeting, Archive, Reflection, Message
 
+
+class EmptySerializer(serializers.Serializer):
+    """Schema-only serializer for endpoints without a request body."""
+
+    pass
+
 class RegisterSerializer(serializers.ModelSerializer):
     permission_classes = [AllowAny]
     password = serializers.CharField(write_only=True, min_length=8)
