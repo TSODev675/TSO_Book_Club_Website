@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 // Small local icon components to avoid dependency on @tabler/icons-react
-import React from 'react'
 const Icon = ({ children, size = 16, style }: any) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={style} xmlns="http://www.w3.org/2000/svg">
     {children}

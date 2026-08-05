@@ -1,5 +1,5 @@
 from rest_framework.permissions import AllowAny
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, serializers, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth.models import User
@@ -196,6 +196,7 @@ class MessageViewSet(viewsets.ModelViewSet):
     
 class VerifyEmailViewSet(viewsets.GenericViewSet):
     permission_classes = [AllowAny]
+    serializer_class = serializers.Serializer
 
     @action(detail=False, methods=['get'], url_path='verify-email/(?P<uidb64>[^/.]+)/(?P<token>[^/.]+)')
     def verify_email(self, request, uidb64=None, token=None):
