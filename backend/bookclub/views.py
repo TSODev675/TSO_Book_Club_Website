@@ -7,7 +7,7 @@ from .models import Profile, Book, Meeting, Archive, Reflection, Message
 from .serializers import (
     UserSerializer, ProfileSerializer, BookSerializer, RegisterSerializer,
     MeetingSerializer, ArchiveSerializer, ReflectionSerializer, MessageSerializer,
-    ChangePasswordSerializer
+    ChangePasswordSerializer, EmptySerializer
 )
 from .emails import send_confirmation_email
 from django.contrib.auth.tokens import default_token_generator
@@ -15,6 +15,8 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 
 # --- Permissions ---
@@ -162,6 +164,7 @@ class ReflectionViewSet(viewsets.ModelViewSet):
 
 
 class MessageViewSet(viewsets.ModelViewSet):
+    queryset = Message.objects.all()
     serializer_class = MessageSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -196,8 +199,15 @@ class MessageViewSet(viewsets.ModelViewSet):
     
 class VerifyEmailViewSet(viewsets.GenericViewSet):
     permission_classes = [AllowAny]
-    serializer_class = serializers.Serializer
+    serializer_class = EmptySerializer
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter('uidb64', OpenApiTypes.STR, OpenApiParameter.PATH),
+            OpenApiParameter('token', OpenApiTypes.STR, OpenApiParameter.PATH),
+        ],
+        responses=EmptySerializer,
+    )
     @action(detail=False, methods=['get'], url_path='verify-email/(?P<uidb64>[^/.]+)/(?P<token>[^/.]+)')
     def verify_email(self, request, uidb64=None, token=None):
         try:
